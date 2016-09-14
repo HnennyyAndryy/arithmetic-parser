@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TEST</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<meta charset="utf-8">
+</head>
+<body>
+	<div id="header">Синтаксичний / лексичний аналізатор. Розробив Гненний А.П., група ІО-61м</div>
+	<div id="controls" class="center">
+		<input type="text" id="input-expression" value="(a-b)(y-23)/(aw*sss-5)">
+		<input type="button" id="analyze-btn" value="&#10004;">
+	</div>
+	<div id="parse-result" class="center">
+		<div id="parse-result-summary"></div>
+		<div id="parse-result-details"></div>
+	</div>
+
+	<script type="text/javascript" src="tokenizer.js"></script>
+	<script type="text/javascript" src="view.js"></script>
+</body>
+</html>
