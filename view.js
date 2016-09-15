@@ -13,7 +13,7 @@ analyzeBtn.addEventListener('click', e => {
 	parseResultDetails.innerHTML = '';
 	if (!res) return;
 	if (!res.errors) {
-		parseResultSummary.innerText = 'No errors found';
+		parseResultSummary.innerHTML = '<div style="text-align : center;">No errors found</div>';
 		parseResultDetails.innerHTML = res.tokens.map(tok => tok.val).join('');
 
 		let rootNode = treebuilder.build(res.tokens);
@@ -62,10 +62,10 @@ function drawTree (rootNode, coords) {
 	setIndexes(rootNode, 'left', 0, 1);
 
 	let treeDOM = document.createElement('div');
+	treeDOM.id = 'graph';
 	let graph = document.getElementById('graph');
-	graph.innerHTML = '';
 	buildTreeDOM(rootNode, null, rootNode.depth, treeDOM);
-	graph.appendChild(treeDOM);
+	graph.parentNode.replaceChild(treeDOM, graph);
 	return 
 }
 
@@ -76,22 +76,37 @@ function buildTreeDOM (node, opt, treeDepth, treeDOM) {
 	let top = node.level * 100 ;
 	vertex.style.left = left + 'px';	
 	vertex.style.top = top + 'px';
-	vertex.innerHTML = node.val;
-	treeDOM.appendChild(vertex);
+	vertex.innerHTML = node.val == '*' ? '&times;' : node.val;
 
 	if (opt) {
 		let edge = document.createElement('div');
-		edge.className = 'edge ' + (opt.side == 'left' ? 'up' : 'down');
+		edge.className = 'edge';
 		edge.style.top = opt.top + 50 + 'px';
-		edge.style.width = Math.abs(left - opt.left) + 'px';
+		let width =  Math.abs(left - opt.left);
+		edge.style.width = width + 'px';
+		let pathDescription;
 		if (opt.side == 'left') {
 			edge.style.left = left + 25 + 'px';
+			pathDescription = 'M0 50 L' + width + ' 0';
 		} 
 		if (opt.side == 'right') {
 			edge.style.left = opt.left + 25 + 'px';
+			pathDescription = 'M0 0 L' + width + ' 50';
 		} 
+		edge.style.background = `url("data:image/svg+xml;utf8,
+								<svg xmlns='http://www.w3.org/2000/svg' version='1.1' 
+								preserveAspectRatio='none' 
+								viewBox='0 0 ${width} 50'> 
+									<path 
+									d='${pathDescription}' 
+									fill='none' 
+									stroke='grey' 
+									stroke-width='0.3'/>
+								</svg>")`.replace(/(\r\n|\r|\n)/g, '');
+
 		treeDOM.appendChild(edge);
 	}
+	treeDOM.appendChild(vertex);
 	let leftNode = node.left;
 	let rightNode = node.right;
 	if (leftNode) {

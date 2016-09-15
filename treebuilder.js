@@ -8,6 +8,21 @@ let treebuilder = function(){
 		'*' : 1,
 	}
 
+	let inverseOp = {
+		'-' : {
+			'-' : '+',
+			'+' : '-',
+			'*' : '*',
+			'/' : '/',
+		},
+		'/' : {
+			'-' : '-',
+			'+' : '+',
+			'*' : '/',
+			'/' : '*',	
+		}
+	}
+
 	function getMinOp (tokens) {
 		let minDepth = Number.MAX_SAFE_INTEGER;
 		let minPos;
@@ -77,8 +92,7 @@ let treebuilder = function(){
 				priority : priorities[tok.val],
 			}
 		});
-		let tree = parse(tokens);
-		return tree;
+		return parse(tokens);
 	}
 
 	function parse (tokens) {
@@ -92,25 +106,8 @@ let treebuilder = function(){
 			let op = getMinOp(tokens);
 			let prevOp = getPrevOp(tokens, op.pos);
 			
-			if (prevOp && prevOp.val == '-') {
-				switch (op.val) {
-					case '+' : 
-					op.val = '-';
-					break;
-					case '-' :
-					op.val = '+';
-					break;
-				}
-			}
-			if (prevOp && prevOp.val == '/') {
-				switch (op.val) {
-					case '*' : 
-					op.val = '/';
-					break;
-					case '/' :
-					op.val = '*';
-					break;
-				}
+			if (prevOp && /(\-|\/)/.test(prevOp.val)) {
+				op.val = inverseOp[prevOp.val][op.val];
 			}
 
 			let leftNode = tokens[op.pos - 1];

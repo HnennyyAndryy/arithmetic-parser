@@ -1,26 +1,42 @@
+@font-face {
+  font-family: 'Lato Light';
+  src: url('fonts/Lato-Light.ttf')  format('truetype');
+}
+@font-face {
+  font-family: 'Roboto Thin';
+  src: url('fonts/Roboto-Thin.ttf')  format('truetype');
+}
+@font-face {
+  font-family: 'Bitter';
+  src: url('fonts/Bitter-Regular.ttf')  format('truetype');
+}
+
 html {
 	height: 100%;
-	overflow-y : scroll;
+	overflow-y : hidden;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+	width: 10px;
 }
  
 ::-webkit-scrollbar-thumb {
-  background: #666;
-  border-radius: 10px;
+  	background: #666;
+  	border-radius: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #10121d;
-  border-radius: 0px;
+  	background: #20222d;
+  	border-radius: 0px;
 }
 
 
 body {
+	overflow-y : scroll;
 	margin : 0;
+	margin-top : 30px;
 	position : relative;
+	height : calc(100% - 30px);
 }
 
 #header {
@@ -39,7 +55,6 @@ body {
 	padding-left : 10px;
 	z-index : 1;
 }
-
 
 .center {
 	margin : auto;
@@ -102,12 +117,12 @@ body {
 #parse-result {
 	overflow: visible;
 	position : relative;
-	margin-top : 70px;
+	margin-top : 60px;
 	width : 600px;
-	font-family : 'Lato Light'
 }
 
 #parse-result #parse-result-summary {
+	font-family : 'Lato Light';
 	font-size : 18px;
 	color : white;
 }
@@ -123,7 +138,7 @@ body {
 }
 
 #parse-result #parse-result-details {
-	margin-top : 40px;
+	margin-top : 50px;
 	color : white;
 	text-align : center;
 	font-family : 'Roboto';
@@ -176,17 +191,15 @@ body {
 	background : chocolate;
 }
 
-
-
 #graph {
 	overflow: visible;
 	position : relative;
-	margin-top : 70px;
+	margin-top : 50px;
 	width : 600px;
 }
 
 .vertex {
-	background : red;
+	background : #860000;
 	width : 50px;
 	height : 50px;
 	border-radius : 25px;
@@ -194,6 +207,13 @@ body {
 	text-align : center;
 	color : white;
 	position : absolute;
+	font-size : 20px;
+	font-family : 'Bitter';
+	
+}
+
+.vertex:last-child {
+	margin-bottom : 50px;
 }
 
 .edge {
@@ -203,37 +223,7 @@ body {
   	background-size: 100% 100%, auto !important;
   	height : 50px;
 }
-.down {
-	background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 10 10'> <path d='M0 0 L10 10' fill='none' stroke='grey' stroke-width='0.3'/></svg>");
-}
-.up {
-	background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 10 10'> <path d='M0 10 L10 0' fill='none' stroke='grey' stroke-width='0.3'/></svg>");	
-}
 
-#a {
-	left : 100px;
-}
-
-#ab {
-	left : 75px;
-	top : 50px;
-	height : 50px;
-	width : 50px;
-}
-
-#ac {
-	left : 125px;
-	top : 50px;
-	height : 50px;
-	width : 50px;	
-}
-
-#b {
-	left : 50px;
-	top : 100px;
-}
-
-#c {
-	left : 150px;
-	top : 100px;
+#footer {
+	
 }
