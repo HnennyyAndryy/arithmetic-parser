@@ -13,11 +13,11 @@
 
 html {
 	height: 100%;
-	overflow-y : hidden;
 }
 
 ::-webkit-scrollbar {
 	width: 10px;
+	height: 10px;
 }
  
 ::-webkit-scrollbar-thumb {
@@ -26,13 +26,16 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  	background: #20222d;
-  	border-radius: 0px;
+  	background: #10121d;
 }
 
+::-webkit-scrollbar-corner {
+	background : #10121d;
+}
 
 body {
 	overflow-y : scroll;
+	overflow-x : scroll;
 	margin : 0;
 	margin-top : 30px;
 	position : relative;
@@ -41,6 +44,7 @@ body {
 
 #header {
 	-webkit-app-region : drag;
+	 -webkit-user-select: none;
 	width : 100%;
 	top : 0px;
 	height : 30px;
@@ -60,6 +64,11 @@ body {
 	margin : auto;
 	left : 0;
 	right : 0;
+}
+
+#main {
+	position : relative;
+	width : 600px;
 }
 
 #controls {
@@ -119,9 +128,10 @@ body {
 	position : relative;
 	margin-top : 60px;
 	width : 600px;
+	word-wrap : break-word;
 }
 
-#parse-result #parse-result-summary {
+#parse-result-summary {
 	font-family : 'Lato Light';
 	font-size : 18px;
 	color : white;
@@ -137,12 +147,29 @@ body {
 	margin-right : 2px;
 }
 
-#parse-result #parse-result-details {
+#parse-result-details, #parse-result-details-placeholder {
 	margin-top : 50px;
 	color : white;
 	text-align : center;
 	font-family : 'Roboto';
 	font-size : 30px;
+	width : 600px;
+}
+
+#parse-result-details-placeholder {
+	display: none;
+	opacity: 0;
+}
+
+.fixed-details {
+	position : fixed;
+	top : 10px;
+	z-index : 2;
+	background : rgba(0,0,0,0.2);
+	border-radius : 10px;	
+}
+.fixed-details:hover {
+	opacity : 0.1;
 }
 
 .bg-default {
@@ -195,7 +222,6 @@ body {
 	overflow: visible;
 	position : relative;
 	margin-top : 50px;
-	width : 600px;
 }
 
 .vertex {
@@ -209,7 +235,7 @@ body {
 	position : absolute;
 	font-size : 20px;
 	font-family : 'Bitter';
-	
+	box-shadow : 1px 1px 0px 1px rgba(50,0,0,0.9);
 }
 
 .vertex:last-child {

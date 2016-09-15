@@ -17,11 +17,13 @@ function onClosed() {
 
 function createMainWindow() {
 	const win = new electron.BrowserWindow({
-		width: 800,
-		height: 600,
+		width: 900,
+		minWidth : 700,
+		height: 768,
+		minHeight : 600,
 		frame: false,
 		show: false,
-		resizable : false,
+		resizable : true,
 	});
 
 	win.loadURL(`file://${__dirname}/index.html`);
