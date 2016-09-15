@@ -19,7 +19,6 @@ html {
 
 
 body {
-	background: #20222d;
 	margin : 0;
 	position : relative;
 }
@@ -101,7 +100,7 @@ body {
 }
 
 #parse-result {
-	overflow: auto;
+	overflow: visible;
 	position : relative;
 	margin-top : 70px;
 	width : 600px;
@@ -109,19 +108,132 @@ body {
 }
 
 #parse-result #parse-result-summary {
-	text-align : center;
-	font-size : 19px;
+	font-size : 18px;
 	color : white;
 }
+
+.dot {
+	width : 10px;
+	height : 10px;
+	display : inline-block;
+	border-radius : 5px;
+	position : relative;
+	bottom : 1px;
+	margin-right : 2px;
+}
+
 #parse-result #parse-result-details {
-	margin-top : 20px;
+	margin-top : 40px;
 	color : white;
 	text-align : center;
 	font-family : 'Roboto';
 	font-size : 30px;
 }
 
-#parse-result .error {
-	color : red;
-	font-weight : bold;
+.bg-default {
+	background: #20222d;
+}
+.darkred {
+	color : darkred;
+}
+.bg-darkred {
+	background : darkred;
+}
+.orangered {
+	color : orangered;
+}
+.bg-orangered {
+	background : orangered;
+}
+.royalblue {
+	color : royalblue;
+}
+.bg-royalblue {
+	background : royalblue;
+}
+.yellow {
+	color : yellow;
+}
+.bg-yellow {
+	background : yellow;
+}
+.magenta {
+	color : magenta;
+}
+.bg-magenta {
+	background : magenta;
+}
+.pink {
+	color : pink;
+}
+.bg-pink {
+	background : pink;
+}
+.chocolate {
+	color : chocolate;
+}
+.bg-chocolate {
+	background : chocolate;
+}
+
+
+
+#graph {
+	overflow: visible;
+	position : relative;
+	margin-top : 70px;
+	width : 600px;
+}
+
+.vertex {
+	background : red;
+	width : 50px;
+	height : 50px;
+	border-radius : 25px;
+	line-height : 50px;
+	text-align : center;
+	color : white;
+	position : absolute;
+}
+
+.edge {
+	position : absolute;
+   	background-repeat:no-repeat !important;
+  	background-position:center center !important;
+  	background-size: 100% 100%, auto !important;
+  	height : 50px;
+}
+.down {
+	background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 10 10'> <path d='M0 0 L10 10' fill='none' stroke='grey' stroke-width='0.3'/></svg>");
+}
+.up {
+	background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 10 10'> <path d='M0 10 L10 0' fill='none' stroke='grey' stroke-width='0.3'/></svg>");	
+}
+
+#a {
+	left : 100px;
+}
+
+#ab {
+	left : 75px;
+	top : 50px;
+	height : 50px;
+	width : 50px;
+}
+
+#ac {
+	left : 125px;
+	top : 50px;
+	height : 50px;
+	width : 50px;	
+}
+
+#b {
+	left : 50px;
+	top : 100px;
+}
+
+#c {
+	left : 150px;
+	top : 100px;
 }
