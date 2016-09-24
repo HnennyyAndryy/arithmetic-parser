@@ -26,8 +26,8 @@ let tokenizer = function () {
 		indexes = [];
 		var t_first = tokens[0];
 		var t_last = tokens[tokens.length - 1];
-		if (t_first.type == 'operator' /*&& /(\*|\/)/.test(t_first.val)*/) indexes.push(0); 
-		if (t_last.type == 'operator'  /*&& /(\*|\/)/.test(t_last.val)*/) indexes.push(tokens.length - 1); 
+		if (t_first.type == 'operator' && !/[+-]/.test(t_first.val)) indexes.push(0); 
+		if (t_last.type == 'operator' && !/[+-]/.test(t_first.val)) indexes.push(tokens.length - 1); 
 		if (indexes.length) {
 			errors.push({
 				reason : 'Not allowed to put operators on beginning or end of expression',
@@ -38,7 +38,6 @@ let tokenizer = function () {
 		// check that there is no misplaced dots
 		indexes = tokens.map((tok, pos) => tok.type == 'dot' ? pos : -1).filter(ind => ~ind);
 		if (indexes.length) {
-			console.log(indexes);
 			errors.push({
 				reason : 'Some dots are misplaced',
 				indexes,
@@ -140,7 +139,54 @@ let tokenizer = function () {
 		if (errors.length) {
 			return {errors, input, tokens,};
 		} else {
-			return {input, tokens,}
+			// fix signs ... 
+			let ind = 0;
+			let tokens2 = JSON.parse(JSON.stringify(tokens));
+			while (ind != tokens2.length) {
+				if (tokens2[ind].type == 'sign' && tokens2[ind].val == '-') {
+					if (/(number|var)/.test(tokens2[ind+1].type)) {
+						tokens2[ind+1].val = '-' + tokens2[ind+1].val;
+					}
+					if (/(open bracket)/.test(tokens2[ind+1].type)) {
+						let inInd = ind+2;
+						if (/(number|var)/.test(tokens2[inInd].type)) {
+							tokens2[inInd].val = '-' + tokens2[inInd].val;
+						}
+						let brCtr = 1;
+						let brInCtr = 0;
+						while (brCtr > 0) {
+							if (!brInCtr && /(sign|operator)/.test(tokens2[inInd].type) && /[+-]/.test(tokens[inInd].val)) {
+								if (tokens2[inInd].val == '-') tokens2[inInd].val = '+';
+								else if (tokens2[inInd].val == '+') tokens2[inInd].val = '-';
+							}
+							if (tokens2[inInd].type == 'open bracket') {
+								brCtr++;
+								brInCtr++;
+								if (inInd == ind+2) {
+									tokens2.splice(inInd, 0, {
+										type : 'sign',
+										val : '-',
+									});
+									inInd++;
+								}
+							}
+							if (tokens2[inInd].type == 'close bracket') {
+								brCtr--;
+								brInCtr--;
+							}
+							inInd++;
+						}
+
+					}
+					//remove sign...
+					tokens2.splice(ind,1);
+				} else ind++;
+			}
+
+			// remove tokens of type 'sign'
+			tokens2 = tokens2.filter(tok => tok.type != 'sign');
+
+			return {input, tokens :tokens2,}
 		}
 
 	}
@@ -213,6 +259,16 @@ let tokenizer = function () {
 				break;
 				case 'operator' :
 				if (curToken) tokens.push(curToken);
+				if ((pos == 0 || chars[pos-1] == '(') && /[+-]/.test(char)) {
+					if (/[0-9a-zA-Z(]/.test(chars[pos+1])) {
+						curToken = {
+							val : char,
+							type : 'sign',
+							pos,
+						};
+						break;
+					}
+				}
 				curToken = {
 					val : char,
 					type : 'operator',
