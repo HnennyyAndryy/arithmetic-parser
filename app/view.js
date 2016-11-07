@@ -2,6 +2,7 @@
 
 let main = document.getElementById('main');
 let analyzeBtn = document.getElementById('analyze-btn');
+let openBracketsBtn = document.getElementById('open-brackets-btn');
 let inputExpression = document.getElementById('input-expression');
 let parseResult = document.getElementById('parse-result');
 let parseResultSummary = document.getElementById('parse-result-summary');
@@ -9,42 +10,62 @@ let parseResultDetails = document.getElementById('parse-result-details');
 let parseResultDetailsPlaceholder = document.getElementById('parse-result-details-placeholder');
 let colors = ['orangered', 'royalblue', 'yellow', 'magenta', 'pink', 'darkred', 'chocolate']
 let lastTree;
+let lastTokens;
 let treeWidth;
 let outmostLeft = Number.MAX_SAFE_INTEGER;
 let outmostRight = 0;
 
 analyzeBtn.addEventListener('click', e => {
-	let res = tokenizer.parse(inputExpression.value);
-	document.getElementById('graph').innerHTML = '';
-	parseResultSummary.innerText = '';
-	parseResultDetails.innerHTML = '';
-	parseResultDetailsPlaceholder.innerHTML = '';
-	if (!res) return;
-	if (!res.errors) {
-		parseResultSummary.innerHTML = '<div style="text-align : center;">Successful syntax / lexical analysis</div>';
-		let details = res.tokens.map(tok => tok.val).join('');
-		parseResultDetails.innerHTML = details;
-		parseResultDetailsPlaceholder.innerHTML = details;
-		lastTree = treebuilder.build(res.tokens);
+	httpGetAsync('/parse', inputExpression.value, data => {
+		let res = JSON.parse(data);	
+		document.getElementById('graph').innerHTML = '';
+		parseResultSummary.innerText = '';
+		parseResultDetails.innerHTML = '';
+		parseResultDetailsPlaceholder.innerHTML = '';
+		lastTokens = null;
+		if (!res) return;
+		if (!res.errors) {
+			parseResultSummary.innerHTML = '<div style="text-align : center;">Successful syntax / lexical analysis</div>';
+			onSuccess(res.tokens);
+			return;
+		} 
+
+		let tokens = res.tokens.map(tok => tok.val);
+		res.errors.forEach( (err, err_i) => {
+			parseResultSummary.innerHTML += `<div class='dot ${err.indexes.length ? 'bg-'+ colors[err_i] : 'bg-default'}'></div>
+											 ${err_i + 1}. ${err.reason}<br>`;
+			tokens = tokens.map( (val, i) => {
+				if (err.infix) {
+					return ~err.indexes.indexOf(i) ? `${val}<span class='${colors[err_i]}'>&UnderParenthesis;</span>` : val;
+				} else {
+					return ~err.indexes.indexOf(i) ? `<span class='${colors[err_i]}'>${val}</span>` : val;
+				}
+			});
+		});
+		parseResultDetails.innerHTML = tokens.join('');
+	});
+});
+
+openBracketsBtn.addEventListener('click', e => {
+	if (!lastTokens) return console.log('No tokens');
+	console.log('Opening brackets' );
+	httpGetAsync('/equiv', lastTokens, data => {
+		let res = JSON.parse(data);
+		onSuccess(res.tokens);
+	});
+})
+
+function onSuccess (tokens, accum) {
+	lastTokens = tokens;
+	let details = tokens.map(tok => tok.val).join('');
+	parseResultDetails.innerHTML = details;
+	parseResultDetailsPlaceholder.innerHTML = details;
+	httpGetAsync('/build', tokens, data => {
+		lastTree = JSON.parse(data);
 		drawTree(lastTree);
 		document.body.scrollLeft = (document.body.scrollWidth - document.body.offsetWidth) / 2;
-		return;
-	} 
-
-	let tokens = res.tokens.map(tok => tok.val);
-	res.errors.forEach( (err, err_i) => {
-		parseResultSummary.innerHTML += `<div class='dot ${err.indexes.length ? 'bg-'+ colors[err_i] : 'bg-default'}'></div>
-										 ${err_i + 1}. ${err.reason}<br>`;
-		tokens = tokens.map( (val, i) => {
-			if (err.infix) {
-				return ~err.indexes.indexOf(i) ? `${val}<span class='${colors[err_i]}'>&UnderParenthesis;</span>` : val;
-			} else {
-				return ~err.indexes.indexOf(i) ? `<span class='${colors[err_i]}'>${val}</span>` : val;
-			}
-		});
 	});
-	parseResultDetails.innerHTML = tokens.join('');
-});
+}
 
 inputExpression.addEventListener('keyup', e => {
 	if (e.keyCode == 13) {
@@ -162,3 +183,15 @@ function positionToCenter () {
 positionToCenter();
 
 analyzeBtn.click();
+
+
+function httpGetAsync(theUrl, params, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl + '?data='+encodeURIComponent(JSON.stringify(params)), true); // true for asynchronous 
+    xmlHttp.send(null);
+}

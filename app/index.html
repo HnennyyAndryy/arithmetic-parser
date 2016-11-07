@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html class="bg-default">
 <head>
-	<title>TEST</title>
+	<title>Parser</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<meta charset="utf-8">
 </head>
 <body class="bg-default">
-	<div id="header">Синтаксичний / лексичний аналізатор. Розробив Гненний А.П., група ІО-61м</div>
+	<div id="header">Work is unfinished - bugs are possible. Developer email: methegoodcat@gmail.com</div>
 	<div id="main">
 		<div id="controls">
-			<input type="text" id="input-expression" value="">
+			<input type="text" id="input-expression" value="(d-a)/(b+c)-a*((m-n)*(5-x))-(r-6)">
 			<input type="button" id="analyze-btn" value="&#10004;">
 		</div>
 		<div id="parse-result">
+			<div id="open-brackets-btn">Open brackets</div>
 			<div id="parse-result-summary"></div>
 			<div id="parse-result-details"></div>
 			<div id="parse-result-details-placeholder"></div>
@@ -24,8 +25,6 @@
 
 	<div id="footer"></div>
 
-	<script type="text/javascript" src="treebuilder.js"></script>
-	<script type="text/javascript" src="tokenizer.js"></script>
 	<script type="text/javascript" src="view.js"></script>
 </body>
 </html>

@@ -126,12 +126,31 @@ body {
 #parse-result {
 	overflow: visible;
 	position : relative;
-	margin-top : 60px;
+	margin-top : 40px;
 	width : 600px;
 	word-wrap : break-word;
 }
 
+#open-brackets-btn {
+	color : #d8d8d8;
+	background: #6b0000;
+	width: 130px;
+	height: 30px;
+	margin: auto;
+	border-radius: 4px;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer;
+}
+#open-brackets-btn:hover {
+	background: #8b0000;
+}
+#open-brackets-btn:active {
+	background: #4b0000;
+}
+
 #parse-result-summary {
+	margin-top: 30px;
 	font-family : 'Lato Light';
 	font-size : 18px;
 	color : white;

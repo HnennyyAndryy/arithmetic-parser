@@ -303,3 +303,5 @@ let tokenizer = function () {
 	}
 }();
 
+module.exports = tokenizer;
+

@@ -128,3 +128,5 @@ let treebuilder = function(){
 		build
 	}
 }();
+
+module.exports = treebuilder;
