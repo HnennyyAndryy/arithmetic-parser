@@ -1,8 +1,8 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8000;
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || 'localhost';
+var server_port = process.env.PORT || 8080;
+var server_ip_address = process.env.IP || 'localhost';
 
 var tokenizer = require('./tokenizer.js');
 var treebuilder = require('./treebuilder.js');
